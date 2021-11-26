@@ -1,0 +1,32 @@
+{
+  "name": "mcpm",
+  "version": "1.0.0",
+  "description": "MineCraft Players Manager",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsc --resolveJsonModule && node dist/index.js",
+    "cmdregister": "node command_register.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrCaelum/MCPM.git"
+  },
+  "author": "mrCaelum <louis.kleiver@gmail.com> (https://github.com/mrCaelum)",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/mrCaelum/MCPM/issues"
+  },
+  "homepage": "https://github.com/mrCaelum/MCPM#readme",
+  "dependencies": {
+    "@discordjs/builders": "^0.8.2",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "axios": "^0.24.0",
+    "discord-api-types": "^0.24.0",
+    "discord.js": "^13.3.1",
+    "minecraft-protocol": "^1.28.0",
+    "mongodb": "^4.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.2"
+  }
+}
