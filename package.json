@@ -4,7 +4,8 @@
   "description": "MineCraft Players Manager",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc --resolveJsonModule && node dist/index.js",
+    "build": "tsc --resolveJsonModule",
+    "start": "node dist/index.js",
     "cmdregister": "node command_register.js"
   },
   "repository": {
