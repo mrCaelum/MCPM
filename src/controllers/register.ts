@@ -1,4 +1,4 @@
-import { MCUser, getUser } from './mojang';
+import { MCUser, getUser } from '../models/mojang';
 import { db } from '../models/mongodb';
 
 export default async function register(discord_id: string, mc_username: string) : Promise<Error | void> {
