@@ -1,6 +1,6 @@
 import { Client, Intents } from 'discord.js';
 import command_handler from './commands';
-import register from '../register';
+import { register } from '../register';
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 

@@ -16,6 +16,7 @@ if (!token) {
     const commands = [
         new SlashCommandBuilder().setName('whoami').setDescription('Tells you who you are'),
         new SlashCommandBuilder().setName('register').setDescription('Register your minecraft account to the server').addStringOption(option => option.setName('minecraft_username').setDescription('The minecraft account to link').setRequired(true)),
+        new SlashCommandBuilder().setName('unregister').setDescription('Unregister you from the server'),
         new SlashCommandBuilder().setName('create').setDescription('Create a new link instance')
             .addSubcommand(option => option.setName('register').setDescription('Create a instance of a register message')
                 .addStringOption(stropt => stropt.setName('button_content').setDescription('Content of the button').setRequired(true))

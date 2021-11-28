@@ -11,17 +11,6 @@ export namespace db {
     }
   }
 
-  export async function getUserById(id: string) : Promise<db.User | null> {
-    const client = await aclient;
-    const db = client.db('mcpm');
-    const result = await db.collection('users').findOne({ _id: id });
-    if (result == null) return null;
-    return {
-      discord_id: result.discord_id,
-      mc_account: result.mc_account
-    };
-  }
-
   export async function getUserByDiscord(discord_id: string) : Promise<db.User | null> {
     const client = await aclient;
     const db = client.db('mcpm');
@@ -37,5 +26,11 @@ export namespace db {
     const client = await aclient;
     const db = client.db('mcpm');
     await db.collection('users').insertOne(user);
+  }
+
+  export async function rmUserByDiscord(discord_id: string) {
+    const client = await aclient;
+    const db = client.db('mcpm');
+    await db.collection('users').deleteOne({ discord_id: discord_id });
   }
 }

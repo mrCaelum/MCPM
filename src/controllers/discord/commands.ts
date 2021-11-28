@@ -1,5 +1,5 @@
 import { MessageEmbed, MessageActionRow, MessageButton, CommandInteraction, CacheType } from 'discord.js';
-import register from '../register';
+import { register, unregister } from '../register';
 import { db } from '../../models/mongodb';
 
 function _embed_register_message(button_content: string, message_content: string, message_title: string | null) {
@@ -36,6 +36,11 @@ async function _register(interaction: CommandInteraction<CacheType>) {
   }
 }
 
+async function _unregister(interaction: CommandInteraction<CacheType>) {
+  const err: Error | void = await unregister(interaction.user.id);
+  await interaction.reply({ content: (!err) ? 'Unregistration successfuly completed !' : err.toString(), ephemeral: true });
+}
+
 async function _create(interaction: CommandInteraction<CacheType>) {
   if (interaction.options.getSubcommand(true) === 'register') {
     const button_content = interaction.options.getString('button_content');
@@ -54,9 +59,10 @@ async function _create(interaction: CommandInteraction<CacheType>) {
 
 export default async function(interaction: CommandInteraction<CacheType>) : Promise<void> {
   const handlers: { key: string, ptr: (interaction: CommandInteraction<CacheType>) => Promise<void> }[] = [
-    { key: 'whoami',   ptr: _whoami   },
-    { key: 'register', ptr: _register },
-    { key: 'create',   ptr: _create   }
+    { key: 'whoami',     ptr: _whoami     },
+    { key: 'register',   ptr: _register   },
+    { key: 'unregister', ptr: _unregister },
+    { key: 'create',     ptr: _create     }
   ];
 
   for (let handler of handlers) {
