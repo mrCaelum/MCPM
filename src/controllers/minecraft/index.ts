@@ -1,11 +1,9 @@
-import mc from 'minecraft-protocol';
+import server from './server';
 
-const client = mc.createClient({
-  host: "localhost",
-  port: 25565,
-  username: "SERVER"
-});
+const mc_server = {
+  write: async function(data: string) {
+    server.stdin.write(data + '\n');
+  }
+};
 
-client.on('chat', (packet) => {
-  return;
-});
+export default mc_server;

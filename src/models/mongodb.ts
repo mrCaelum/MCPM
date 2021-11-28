@@ -8,18 +8,8 @@ export namespace db {
     mc_account: {
       uuid: string;
       name: string;
-    }
-  }
-
-  export async function getUserById(id: string) : Promise<db.User | null> {
-    const client = await aclient;
-    const db = client.db('mcpm');
-    const result = await db.collection('users').findOne({ _id: id });
-    if (result == null) return null;
-    return {
-      discord_id: result.discord_id,
-      mc_account: result.mc_account
-    };
+    },
+    op: boolean;
   }
 
   export async function getUserByDiscord(discord_id: string) : Promise<db.User | null> {
@@ -29,7 +19,8 @@ export namespace db {
     if (result == null) return null;
     return {
       discord_id: result.discord_id,
-      mc_account: result.mc_account
+      mc_account: result.mc_account,
+      op: result.op
     };
   }
 
@@ -37,5 +28,18 @@ export namespace db {
     const client = await aclient;
     const db = client.db('mcpm');
     await db.collection('users').insertOne(user);
+  }
+
+  export async function rmUserByDiscord(discord_id: string) {
+    const client = await aclient;
+    const db = client.db('mcpm');
+    await db.collection('users').deleteOne({ discord_id: discord_id });
+  }
+
+  export async function setOp(discord_id: string, op: boolean) : Promise<boolean> {
+    const client = await aclient;
+    const db = client.db('mcpm');
+    const result = await db.collection('users').updateOne({ discord_id: discord_id }, { op: op });
+    return !(!result || result.acknowledged === false || result.matchedCount === 0 || result.modifiedCount === 0);
   }
 }
