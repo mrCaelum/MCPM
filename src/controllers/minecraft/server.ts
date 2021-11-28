@@ -1,6 +1,7 @@
-import { time } from '@discordjs/builders';
 import { spawn } from 'child_process';
+import { Message } from 'discord.js';
 import readline from 'readline';
+import { connection_handler, message_handler } from '../discord/minecraft_link';
 
 const server_path: string = '../server';
 const server_file: string = 'server.jar';
@@ -35,13 +36,32 @@ function _parse_line(line: string) : Data {
   };
 }
 
+function _info_handler(data: Data) : void {
+  const tmp = data.data.split(' ');
+  if (tmp[1] === 'joined' && tmp[2] === 'the' && tmp[3] === 'game') {
+    connection_handler(tmp[0], true, data.time);
+  } else if (tmp[1] === 'left' && tmp[2] === 'the' && tmp[3] === 'game') {
+    connection_handler(tmp[0], false, data.time);
+  } else if (tmp[0].startsWith('<') && tmp[0].endsWith('>')) {
+    const username: string = tmp[0].slice(1, -1);
+    const message: string[] = tmp;
+    message.shift();
+    message_handler(username, message.join(' '), data.time);
+  }
+  console.log(data);
+}
+
 mc_server.stdout.setEncoding('utf-8');
 mc_server.stdout.on('data', (raw: string) => {
   for (let line of raw.split('\n')) {
     if (line.substring(-1) === '\r') line.slice(0, -1);
     if (line.length === 0) break;
     const data: Data = _parse_line(line);
-    console.log(data);
+    if (data.type === 'Server thread/INFO') {
+      _info_handler(data);
+    } else {
+      console.log(data);
+    }
   }
 });
 
@@ -56,12 +76,6 @@ mc_server.on('error', (err: Error) => {
 
 mc_server.on('close', (code) => {
   console.log('Server closed !');
-});
-
-const ctrl = readline.createInterface(process.stdin);
-
-ctrl.on('line', (line) => {
-  mc_server.stdin.write(line + '\n');
 });
 
 export default mc_server;
