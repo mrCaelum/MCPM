@@ -1,10 +1,10 @@
 import { spawn } from 'child_process';
-import { connection_handler, message_handler } from '../discord/minecraft_link';
+import { connection_handler, message_handler, advancement_handler } from '../discord/minecraft_link';
 
 const server_path: string = '../server';
 const server_file: string = 'server.jar';
 const min_heap_size: string = '2048M';
-const max_heap_size: string = '8192M';
+const max_heap_size: string = '4096M';
 
 const mc_server = spawn('java', ['-Xmx' + max_heap_size, '-Xms' + min_heap_size, '-jar', './' + server_file, 'nogui'], { cwd: server_path });
 
@@ -40,6 +40,8 @@ function _info_handler(data: Data) : void {
     connection_handler(tmp[0], true);
   } else if (tmp[1] === 'left' && tmp[2] === 'the' && tmp[3] === 'game') {
     connection_handler(tmp[0], false);
+  } else if (tmp[1] === 'has' && tmp[2] === 'made' && tmp[3] === 'the' && tmp[4] === 'advancement') {
+    advancement_handler(tmp[0], tmp.slice(5).join(' ').slice(1, -1));
   } else if (tmp[0].startsWith('<') && tmp[0].endsWith('>')) {
     const username: string = tmp[0].slice(1, -1);
     const message: string[] = tmp;

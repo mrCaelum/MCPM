@@ -25,6 +25,7 @@ async function _stop(interaction: CommandInteraction<CacheType>) {
   if (!self || self.op === false) return await interaction.reply({ content: 'Insufficient permissions to run this command !', ephemeral: true });
   mc_server.write('stop');
   await interaction.reply({ content: 'Stopping the server...', ephemeral: true });
+  process.exit(0);
 }
 
 async function _whoami(interaction: CommandInteraction<CacheType>) {
@@ -32,7 +33,7 @@ async function _whoami(interaction: CommandInteraction<CacheType>) {
   if (result == null) {
     await interaction.reply({ content: 'Not registered yet, type \"/register\" to register your account', ephemeral: true });
   } else {
-    await interaction.reply({ content: 'Hello ' + interaction.user.username + ' ! Your account is actually linked to \"' + result.mc_account.name + '\" in minecraft :)', ephemeral: true });
+    await interaction.reply({ content: 'Hello ' + interaction.user.username + ' ! Your account is actually linked to \"' + result.mc_username + '\" in minecraft :)', ephemeral: true });
   }
 }
 
@@ -72,7 +73,7 @@ async function _deop(interaction: CommandInteraction<CacheType>) {
   const user_id = user.slice(3, -1);
   const target: db.User | null = await db.getUserByDiscord(user_id);
   if (target === null) return await interaction.reply({ content: 'User not registed !', ephemeral: true });
-  if (target.op === true) return await interaction.reply({ content: 'The target user is already not op !', ephemeral: true });
+  if (target.op === false) return await interaction.reply({ content: 'The target user is already not op !', ephemeral: true });
   deop(user_id);
   await interaction.reply({ content: user + 'is no longer an operator !', ephemeral: true });
 }

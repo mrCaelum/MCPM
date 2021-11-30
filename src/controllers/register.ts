@@ -8,7 +8,7 @@ export async function register(discord_id: string, mc_username: string) : Promis
   if (mc_account == null) return new Error('Invalid minecraft account !');
   const payload: db.User = {
     discord_id: discord_id,
-    mc_account: mc_account,
+    mc_username: mc_account.name,
     op: false
   };
   db.addUser(payload);
@@ -19,5 +19,5 @@ export async function unregister(discord_id: string) : Promise<Error | void> {
   const account: db.User | null = await db.getUserByDiscord(discord_id);
   if (account == null) return new Error('You are not registered !');
   db.rmUserByDiscord(discord_id);
-  mc_server.write('whitelist remove ' + account.mc_account.name);
+  mc_server.write('whitelist remove ' + account.mc_username);
 }
