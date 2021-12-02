@@ -8,8 +8,7 @@ export async function register(discord_id: string, mc_username: string) : Promis
   if (mc_account == null) return new Error('Invalid minecraft account !');
   const payload: db.User = {
     discord_id: discord_id,
-    mc_username: mc_account.name,
-    op: false
+    mc_username: mc_account.name
   };
   db.addUser(payload);
   mc_server.write('whitelist add ' + mc_account.name);

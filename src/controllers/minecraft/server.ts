@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { connection_handler, message_handler, advancement_handler } from '../discord/minecraft_link';
+import { connection_handler, message_handler, advancement_handler, command_logger } from '../discord/minecraft_link';
 
 const server_path: string = '../server';
 const server_file: string = 'server.jar';
@@ -35,6 +35,10 @@ function _parse_line(line: string) : Data {
 }
 
 function _info_handler(data: Data) : void {
+  if (data.data.startsWith('[') && data.data.endsWith(']') && data.data.split(' ')[0].endsWith(':')) {
+    command_logger(data.data.slice(1, -1));
+    return;
+  }
   const tmp = data.data.split(' ');
   if (tmp[1] === 'joined' && tmp[2] === 'the' && tmp[3] === 'game') {
     connection_handler(tmp[0], true);

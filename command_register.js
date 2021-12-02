@@ -18,15 +18,9 @@ if (!token) {
         new SlashCommandBuilder().setName('whoami').setDescription('Tells you who you are'),
         new SlashCommandBuilder().setName('register').setDescription('Register your minecraft account to the server').addStringOption(option => option.setName('minecraft_username').setDescription('The minecraft account to link').setRequired(true)),
         new SlashCommandBuilder().setName('unregister').setDescription('Unregister you from the server'),
-        new SlashCommandBuilder().setName('op').setDescription('Op the target user').addStringOption(option => option.setName('user').setDescription('The user to make an operator').setRequired(true)),
-        new SlashCommandBuilder().setName('deop').setDescription('Deop the target user').addStringOption(option => option.setName('user').setDescription('The user to remove from the operators list').setRequired(true)),
-        new SlashCommandBuilder().setName('set').setDescription('Set command').addSubcommand(option => option.setName('chat_channel').setDescription('Set the current channel to the active chat channel')),
-        new SlashCommandBuilder().setName('create').setDescription('Create a new link instance')
-            .addSubcommand(option => option.setName('register').setDescription('Create a instance of a register message')
-                .addStringOption(stropt => stropt.setName('button_content').setDescription('Content of the button').setRequired(true))
-                .addStringOption(stropt => stropt.setName('message_content').setDescription('Content of the message').setRequired(true))
-                .addStringOption(stropt => stropt.setName('message_title').setDescription('Title of the message').setRequired(false))
-            ),
+        new SlashCommandBuilder().setName('set').setDescription('Set command')
+            .addSubcommand(option => option.setName('chat_channel').setDescription('Set the current channel to the active chat channel'))
+            .addSubcommand(option => option.setName('log_channel').setDescription('Set the current channel to the active log channel'))
     ]
         .map(command => command.toJSON());
 

@@ -6,7 +6,6 @@ export namespace db {
   export interface User {
     discord_id: string;
     mc_username: string;
-    op: boolean;
   }
 
   export async function getUserByDiscord(discord_id: string) : Promise<db.User | null> {
@@ -16,8 +15,7 @@ export namespace db {
     if (result == null) return null;
     return {
       discord_id: result.discord_id,
-      mc_username: result.mc_username,
-      op: result.op
+      mc_username: result.mc_username
     };
   }
 
@@ -28,8 +26,7 @@ export namespace db {
     if (result == null) return null;
     return {
       discord_id: result.discord_id,
-      mc_username: result.mc_username,
-      op: result.op
+      mc_username: result.mc_username
     };
   }
 

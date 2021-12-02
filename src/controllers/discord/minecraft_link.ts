@@ -2,7 +2,8 @@ import { MessageEmbed, TextChannel } from 'discord.js';
 import client from '.';
 import { db } from '../../models/mongodb'
 
-var CHANNEL: TextChannel | undefined;
+var CHAT_CHANNEL: TextChannel | undefined;
+var LOG_CHANNEL: TextChannel | undefined;
 
 function _embed_connection_message(username: string, connect: boolean) {
   const embed = new MessageEmbed()
@@ -29,36 +30,59 @@ function _embed_achivement(username: string, achivement: string) {
 }
 
 
-export function set_channel(channel_id: string) : Error | void {
+export function set_chat_channel(channel_id: string) : Error | void {
   const channel = client.channels.cache.get(channel_id);
   if (!channel || !channel.isText()) return new Error();
-  CHANNEL = channel as TextChannel;
+  CHAT_CHANNEL = channel as TextChannel;
+}
+
+export function set_log_channel(channel_id: string) : Error | void {
+  const channel = client.channels.cache.get(channel_id);
+  if (!channel || !channel.isText()) return new Error();
+  LOG_CHANNEL = channel as TextChannel;
 }
 
 export function get_channel_id() : string | null {
-  if (CHANNEL !== undefined) {
-    return CHANNEL.id;
+  if (CHAT_CHANNEL !== undefined) {
+    return CHAT_CHANNEL.id;
   }
   return null;
 }
 
 export function connection_handler(username: string, connect: boolean) : void {
-  if (CHANNEL !== undefined) {
-    CHANNEL.send(_embed_connection_message(username, connect));
+  if (CHAT_CHANNEL !== undefined) {
+    CHAT_CHANNEL.send(_embed_connection_message(username, connect));
   }
 }
 
 export function message_handler(username: string, message: string) : void {
-  if (CHANNEL !== undefined) {
-    CHANNEL.send(_embed_message(username, message));
+  if (CHAT_CHANNEL !== undefined) {
+    CHAT_CHANNEL.send(_embed_message(username, message));
   }
 }
 
 export async function advancement_handler(username: string, advancement: string) : Promise<void> {
   const achivements = [
-    { name: 'Stone Age', id: '915194601407647775' }
+    { name: 'Return to Sender',        id: '915198430027059210' },
+    { name: 'Hot Tourist Destination', id: '915198738824306720' },
+    { name: 'A Balanced Diet',         id: '915200003880935424' },
+    { name: 'Serious Dedication',      id: '915199869868736562' },
+    { name: 'Sniper Duel',             id: '915199571246841897' },
+    { name: 'Bullseye',                id: '915199571246841897' },
+    { name: 'Two Birds, One Arrow',    id: '915199252706263090' },
+    { name: 'Arbalistic',              id: '915199521531768862' },
+    { name: 'Hero of the Village',     id: '915199156937707530' },
+    { name: 'Two by two',              id: '915199700255248414' },
+    { name: 'Cover Me in Debris',      id: '915198662760595456' },
+    { name: 'Subspace Bubble',         id: '915198500134862878' },
+    { name: 'A Complete Catalogue',    id: '915199773533937715' },
+    { name: 'A Furious Cocktail',      id: '915198965564178443' },
+    { name: 'Uneasy Alliance',         id: '915198611468451890' },
+    { name: 'Monsters Hunted',         id: '915279323034951710' },
+    { name: 'Adventuring Time',        id: '915199397590085633' },
+    { name: 'How did we get here',     id: '915198148312440834' }
   ];
-  if (CHANNEL !== undefined) {
+  if (CHAT_CHANNEL !== undefined) {
     if (process.env.GUILD_ID !== undefined) {
       const account: db.User | null = await db.getUserByMinecraft(username);
       console.log(account);
@@ -84,6 +108,12 @@ export async function advancement_handler(username: string, advancement: string)
         console.log('Error: User not found');
       }
     }
-    CHANNEL.send(_embed_achivement(username, advancement));
+    CHAT_CHANNEL.send(_embed_achivement(username, advancement));
+  }
+}
+
+export function command_logger(line: string) {
+  if (LOG_CHANNEL !== undefined) {
+    LOG_CHANNEL.send(line);
   }
 }
